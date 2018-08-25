@@ -26,11 +26,11 @@ You do not need to install anything extra if you are installing on Windows versi
 
 ## How to use the API
 To use the API, you can get started with the following commands.
-`
-ffmpeg.php?input=filename.mp4&output=filename.webm
 
-ffmpeg.php?input=filename.mp4&output=filename.mp3
+`ffmpeg.php?input=filename.mp4&output=filename.webm`
 
-ffmpeg.php?passthrough=-i "/media/storage1/test.mp4" -y -codec:a libmp3lame -ac 2 -ar 44100 -ab 128k "/media/storage1/output.mp3"
-`
+`ffmpeg.php?input=filename.mp4&output=filename.mp3`
+
+`ffmpeg.php?passthrough=-i "/media/storage1/test.mp4" -y -codec:a libmp3lame -ac 2 -ar 44100 -ab 128k "/media/storage1/output.mp3"`
+
 ** Paths that passed in can be either real or relative. The script will convert them to real path anyway.
