@@ -57,26 +57,22 @@ if (mv("filepath") != "" && mv("filename") != ""){
 	<div class="ts info segment">
 		<p>You can do something amazing with this wrapper. For example, you can make the module you write gain access to FFmpeg by sending AJAX command in the above format. Or you can do some basic file conversion with the following quick functions.</p>
 		<div class="ts header">
-			System Functions
-			<div class="sub header">These functions can be used standalone without ArOZ Online System nor the SystemAOB functions</div>
-		</div>
-		<div class="ts basic segment" style="background-color:#aed1a9 !important"> 
-			<button class="ts secondary opinion button">Convert File</button>
-			<?php 
-				if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-					
-				}else{
-					echo '<a class="ts secondary opinion button" href="quick_install.php">apt-install avconv</a>';
-				}
-			?>
-			
-		</div>
-		<div class="ts header">
 			ArOZ Online Functions
 			<div class="sub header">These functions have to be used with ArOZ Online System</div>
 		</div>
 		<div class="ts basic segment" style="background-color:#a9cbd1 !important"> 
 			<button class="ts secondary opinion button" onClick="createDesktopIcon();">Create Desktop Icon</button>
+			<a class="ts secondary opinion button" href="readonlyFileViewer.php?path=../">Convert File</a>
+			
+			<?php 
+				if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+					
+				}else{
+					echo '<a class="ts secondary opinion button" href="readonlyFileViewer.php?path=/media">Convert File (External Storage)</a>';
+					echo '<a class="ts secondary opinion button" href="quick_install.php">apt-install avconv</a>';
+				}
+			?>
+			
 		</div>
 	</div>
 	<div class="ts negative segment">

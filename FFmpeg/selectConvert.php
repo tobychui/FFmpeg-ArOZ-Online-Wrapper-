@@ -58,12 +58,12 @@ function checkIfImage($file){
 	</div>
 	Target Format
 	<?php
-	$musicFormats = ["mp3","aac","ogg","wav","flac"];
+	$musicFormats = ["mp3","wav","flac","aac","ogg"];
 	$videoFormats = ["webm","mp4"];
 	$imageFormats = ["png","jpg","gif"];
-	$isAudio = check_file_is_audio($_GET['filepath']);
-	$isVideo = checkIfVideo($_GET['filepath']);
-	$isImage = checkIfImage($_GET['filepath']);
+	$isAudio = check_file_is_audio($_GET['filepath']) || in_array($ext,$musicFormats);
+	$isVideo = checkIfVideo($_GET['filepath']) || in_array($ext,$videoFormats);
+	$isImage = checkIfImage($_GET['filepath']) || in_array($ext,$imageFormats);
 	?>
 	<select id="targetFormat" class="ts basic tiny fluid dropdown">
 	<?php
@@ -85,6 +85,23 @@ function checkIfImage($file){
 			}
 		}
 	}else if ($isImage){
+		foreach ($imageFormats as $format){
+			if ($format != $ext){
+				echo '<option>'.$format.'</option>';
+			}
+		}
+	}else if (!$isAudio && !$isVideo && !$isImage){
+		//Unknown format, just echo every supported format
+		foreach ($videoFormats as $format){
+			if ($format != $ext){
+				echo '<option>'.$format.'</option>';
+			}
+		}
+		foreach ($musicFormats as $format){
+			if ($format != $ext){
+				echo '<option>'.$format.'</option>';
+			}
+		}
 		foreach ($imageFormats as $format){
 			if ($format != $ext){
 				echo '<option>'.$format.'</option>';
@@ -117,22 +134,38 @@ if (inVDI){
 }
 
 function cancelConversion(){
-	parent.callToInterface().showNotification("<i class='remove icon'></i> Conversion Cancelled");
-	window.location.href="../SystemAOB/functions/killProcess.php";
+	if (inVDI){
+		parent.callToInterface().showNotification("<i class='remove icon'></i> Conversion Cancelled");
+		window.location.href="../SystemAOB/functions/killProcess.php";
+	}else{
+		window.location.href = "index.php";
+	}
 }
 
 function confirmConversion(){
 	var targetFile = $("#basedir").val() + filenameOnly + "." + $("#targetFormat option:selected").text();
-	parent.callToInterface().showNotification("<i class='exchange icon'></i> Conversion started in the background.");
+	 if (inVDI){
+		parent.callToInterface().showNotification("<i class='exchange icon'></i> Conversion started in the background.");
+	 }
 	console.log("ffmpeg.php?input=" + sourceFile + "&output=" + targetFile);
 	$("#convertingInterface").show();
 	  $.ajax({
 		url:"ffmpeg.php?input=" + sourceFile + "&output=" + targetFile,  
 		success:function(data) {
 		  if (data.includes("ERROR")){
-			  parent.callToInterface().showNotification("<i class='remove icon'></i> " . data);
+			 if (inVDI){
+				 parent.callToInterface().showNotification("<i class='remove icon'></i> " . data);
+			 }else{
+				 alert(data);
+			 }
 		  }else{
-			  window.location.href="../SystemAOB/functions/killProcess.php"  
+			  if (inVDI){
+				  window.location.href="../SystemAOB/functions/killProcess.php";
+			  }else{
+				  alert("Conversion is started in the background.");
+				  window.location.href = "index.php";
+			  }
+			  
 		  }
 		}
 	  });
